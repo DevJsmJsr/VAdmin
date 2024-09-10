@@ -1,0 +1,9 @@
+[submodule "VAdmin-app"]
+	path = VAdmin-app
+	url = https://github.com/DevJsmJsr/VAdmin-app.git
+[submodule "VAdmin-backend"]
+	path = VAdmin-backend
+	url = https://github.com/DevJsmJsr/VAdmin-backend.git
+[submodule "VAdmin-frontend"]
+	path = VAdmin-frontend
+	url = https://github.com/DevJsmJsr/VAdmin-frontend.git
