@@ -1,0 +1,49 @@
+
+services:
+
+  postgres:
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./init/postgres:/postgres:rw
+      - ./storage/postgres:/var/lib/postgresql/data:rw
+    env_file: envs/postgres.env
+    networks:
+      - vadmin-backend-net
+
+  vadmin-backend:
+    container_name: backend
+    platform: linux/amd64
+    build: vadmin-backend
+    links:
+      - postgres:postgres
+    volumes:
+      - ./vadmin-backend/vadmin:/opt/project:rw
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    networks:
+      - vadmin-backend-net
+    env_file: vadmin-backend/vadmin.env
+
+  vadmin-frontend:
+    platform: linux/amd64
+    build: vadmin-frontend
+    links:
+      - vadmin-backend:vadmin-backend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./vadmin-frontend:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - vadmin-frontend-net
+    environment:
+      - CI=true
+      - CHOKIDAR_USEPOLLING=true
+
+networks:
+  vadmin-backend-net:
+  vadmin-frontend-net:
