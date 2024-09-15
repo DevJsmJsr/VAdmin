@@ -10,9 +10,9 @@ services:
       - ./storage/postgres:/var/lib/postgresql/data:rw
     env_file: envs/postgres.env
     networks:
-      - vadmin-backend-net
+      - backend-vadmin-net
 
-  vadmin-backend:
+  backend-vadmin:
     container_name: backend
     platform: linux/amd64
     build: vadmin-backend
@@ -25,25 +25,25 @@ services:
     depends_on:
       - postgres
     networks:
-      - vadmin-backend-net
+      - backend-vadmin-net
     env_file: vadmin-backend/vadmin.env
 
-  vadmin-frontend:
+  frontend-vadmin:
     platform: linux/amd64
     build: vadmin-frontend
     links:
-      - vadmin-backend:vadmin-backend
+      - backend-vadmin:backend-vadmin
     ports:
       - "3000:3000"
     volumes:
       - ./vadmin-frontend:/usr/src/app
       - /usr/src/app/node_modules
     networks:
-      - vadmin-frontend-net
+      - frontend-vadmin-net
     environment:
       - CI=true
       - CHOKIDAR_USEPOLLING=true
 
 networks:
-  vadmin-backend-net:
-  vadmin-frontend-net:
+  backend-vadmin-net:
+  frontend-vadmin-net:
